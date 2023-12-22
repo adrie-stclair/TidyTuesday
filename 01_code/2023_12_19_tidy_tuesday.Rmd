@@ -43,15 +43,27 @@ tt <- tt_load("2022-12-06")
 elevators <- tt$elevators %>% 
   janitor::clean_names() %>% 
   filter(longitude > -76) %>% 
-  rename_all(str_remove, "^dv_")
+  rename_all(str_remove, "^dv_") %>% 
+  mutate(floor_to_raw = floor_to, 
+         floor_to = is.numeric(floor_to),
+         zip_code = str_sub(as.character(na_if(zip_code, 0)), 1, 5),
+         floor_to = ifelse(floor_to > 90, NA, floor_to))
 
+  
+         
 ```
 
 
 ```{r}
 
-elevators %>% 
-  count(device_status_description, sort = TRUE)
+
+elevators  %>% 
+  arrange(desc(floor_to)) %>% 
+  group_by(bin, house_number, street_name, zip_code, borough) %>% 
+  summarize(max_floor = max(floor_to, na.rm = TRUE),
+            n_elevators = n(),
+            .groups = "drop") %>% 
+  arrange(desc(max_floor))
 
 
 ```
@@ -62,8 +74,21 @@ elevators %>%
   geom_point()
   
 
-```
 
+
+```
+```{r}
+elevators %>%
+  filter(!is.na(floor_to)) %>% 
+  mutate(floor_to = as.numeric(floor_to)) %>% 
+  ggplot(aes(floor_to)) +
+  geom_histogram() +
+  scale_x_log10(labels = comma_format(1))
+
+
+
+```
+we're on Minute 15:02
 
 # Readme
 
