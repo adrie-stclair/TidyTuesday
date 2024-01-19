@@ -10,7 +10,9 @@ Happy Solstice! Let's celebrate the coming of the light with some data analysis!
 
 I'm going to work through a screenshare with David Robinson, found here:[David Robinson - TidyTuesday Screencast for December 6, 2022](https://www.youtube.com/watch?v=d7uFpxtiXyk). 
 
+I stopped around minute 15 and watched the rest of the screencast without following the coding. 
 
+This code is not my own. 
 
 
 ```{r setup, include=FALSE}
@@ -37,7 +39,7 @@ results_dir <- "04_results"
 Download the weekly data and make available in the `tt` object.
 
 ```{r Load}
-
+a
 tt <- tt_load("2022-12-06")
 
 elevators <- tt$elevators %>% 

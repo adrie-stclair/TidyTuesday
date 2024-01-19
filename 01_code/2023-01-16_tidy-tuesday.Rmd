@@ -1,0 +1,88 @@
+---
+title: "Tidy Tuesday - January 16, 2024"
+author: "Adrienne St Clair"
+date: "2024-01-19"
+output: html_document
+---
+
+
+
+```{r setup, include=FALSE}
+
+knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+library(tidytuesdayR)
+library(scales)
+library(lubridate)
+theme_set(theme_light())
+library(here)
+library(lubridate)
+
+```
+Today I'll be working through the Tidy Tuesday project on my own rather than following a screencast. 
+
+All code is my own. 
+
+```{r directories}
+code_dir    <- "01_code"
+raw_data    <- "02_raw-data"
+data_dir    <- "03_clean-data"
+results_dir <- "04_results"
+```
+# Load the weekly Data
+
+Download the weekly data and make available in the `tt` object.
+
+```{r Load}
+
+tt <- tt_load("2024-01-16")
+
+```
+
+Here's background on the data set: [Tidy Tuesday - Polling Places]( https://github.com/rfordatascience/tidytuesday/blob/master/data/2024/2024-01-16/readme.md). 
+
+
+```{r}
+data <- tt[[1]]
+```
+
+how do we like the column names that came with the data? 
+
+```{r}
+colnames(data)
+```
+They seem easy enough to work with.   
+
+I looked through the data types and they seem okay for now. I'll consider changing the `state` column to a factor if it seems like it would be useful to be able to drop levels in the future.  
+
+Some states don't have data, as they are primarily vote-by-mail. 
+What states are we working with? 
+```{r}
+
+data %>%
+  select(state) %>% 
+  unique() %>% 
+  arrange() 
+
+```
+How many different types of jurisdiction are there? How many different kinds are found in a single state? 
+```{r}
+data %>% 
+  select(jurisdiction_type) %>% 
+  unique()
+
+data %>% 
+  group_by(state, jurisdiction_type) %>% 
+  summarize(n = n())
+
+```
+
+
+Looks like we have 39 states. 
+
+The first question that comes to mind is how they compare with polling places per capita. I might be interested in 
+
+
+
+
