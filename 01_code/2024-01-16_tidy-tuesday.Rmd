@@ -81,9 +81,12 @@ data %>%
   unique()
 
 
-data %>% 
+states_with_multiple <- data %>% 
   group_by(state, jurisdiction_type) %>%
-  count()
+  summarise() %>% 
+  group_by(state) %>% 
+  summarise(n = n_distinct(jurisdiction_type)) %>% 
+  filter(n > 1)
 
 
 ```
