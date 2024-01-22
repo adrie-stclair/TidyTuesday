@@ -1,0 +1,98 @@
+---
+title: "Tidy Tuesday - January 16, 2024"
+author: "Adrienne St Clair"
+date: Last updated "`r format(Sys.time(), '%d %B, %Y')`"
+output: 
+  html_document:
+    code_folding: hide
+---
+
+
+
+```{r setup, include=FALSE}
+
+knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+library(tidytuesdayR)
+library(scales)
+library(lubridate)
+theme_set(theme_light())
+library(here)
+library(lubridate)
+library(kableExtra)
+
+```
+Today I'll be working through the Tidy Tuesday project on my own (rather than following a screencast).
+
+All code is my own. 
+
+```{r directories}
+code_dir    <- "01_code"
+raw_data    <- "02_raw-data"
+data_dir    <- "03_clean-data"
+results_dir <- "04_results"
+```
+
+# Load the weekly Data
+
+Download the weekly data and make available in the `tt` object.
+
+```{r Load}
+# I've commented out these two lines to load the data once then save it as an RDS so I can simply call that object rather than downloading the data set again. If I were starting afresh, I would want these two lines to run. 
+
+# tt <- tt_load("2024-01-16")
+
+# saveRDS(tt, file = here(raw_data, "2024-01-16.rds"))
+
+data <- read_rds(here(raw_data, "2024-01-16.rds"))[[1]]
+
+```
+
+Here's background on the data set: [Tidy Tuesday - Polling Places]( https://github.com/rfordatascience/tidytuesday/blob/master/data/2024/2024-01-16/readme.md). 
+
+how do we like the column names that came with the data? 
+
+```{r}
+colnames(data)
+
+```
+They seem easy enough to work with.   
+
+I looked through the data types and they seem okay for now. I'll consider changing the `state` column to a factor if it seems like it would be useful to be able to drop levels in the future.  
+
+Some states don't have data, as they are primarily vote-by-mail. 
+What states are we working with? 
+```{r}
+
+data %>%
+  select(state) %>% 
+  unique() %>% 
+  arrange() %>% 
+  kbl(col.names = c("States in Data Set")) %>%
+  kable_classic(html_font = "Times New Roman", full_width = F) %>%
+  scroll_box(width = "100%", height = "400px")
+
+```
+How many different types of jurisdiction are there? How many different kinds are found in a single state? 
+```{r}
+data %>% 
+  select(jurisdiction_type) %>% 
+  unique()
+
+
+data %>% 
+  group_by(state, jurisdiction_type) %>%
+  count()
+
+
+```
+
+
+Looks like we have 39 states. 
+
+The first question that comes to mind is how they compare with polling places per capita. I might be interested in 
+
+
+
+
